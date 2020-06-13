@@ -34,14 +34,19 @@
         <h1 style="padding-top: 4rem;">DevC Clash of Code 2020 Leaderboard</h1>
         <p>Kontes pemrograman oleh <a href="https://www.facebook.com/groups/DevCBandung">DevC Bandung</a> dan <a href="https://www.facebook.com/groups/DevCSemarang">DevC Semarang</a>.<br/>
         Untuk registrasi dan info lebih lanjut mengenai DevC Clash of Code 2020, <a href="https://bit.ly/DevCCoC">klik di sini</a>.</p>
+
+        <p style="font-size:75%; margin: 0">
+          Updated automatically every 30 seconds <a id="update" href="#">(update now)</a><br/>
+          <span id="last-updated">Last updated: never</span>
+        </p>
         <table class="table table-striped table-hover">
           <thead>
             <tr>
               <th>Rank</th>
               <th>Nama</th>
-              <th>Kota</th>
+              <th><abbr title="Kota DevC">Kota</abbr></th>
               <th>Skor</th>
-              <th>Waktu</th>
+              <th><abbr title="Jumlah dari waktu submisi terakhir semua soal dengan nilai maksimal">Waktu</abbr></th>
             </tr>
           </thead>
           <tbody id="tbody">
@@ -83,6 +88,7 @@
             return `<tr><td>${person.rank}</td><td>${person.name}</td><td>${person.city}</td><td>${person.score}</td><td>${formatTime(person.time)}</td></tr>`;
           }).join('');
           document.getElementById('tbody').innerHTML = html;
+          document.getElementById('last-updated').innerHTML = `Last updated: ${new Date()}`;
           console.log('fetching leaderboard done!')
         }).catch(function (err) {
           console.error('error fetching leaderboard:', err.message);
@@ -90,6 +96,11 @@
       }
       fetchLeaderboard();
       setInterval(fetchLeaderboard, 30000);
+      document.getElementById('update').onclick = function (e) {
+        e.preventDefault();
+        setTimeout(fetchLeaderboard, 0);
+        return false;
+      };
     });
   </script>
 </body>
