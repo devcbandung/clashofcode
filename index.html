@@ -117,7 +117,11 @@
       time = Math.floor(time/60);
       var minute = Math.floor(time % 60);
       var hour = Math.floor(time/60);
-      return `${hour}:${pad(minute)}:${pad(second)}`;
+      if (hour < 24) {
+        return `${hour}:${pad(minute)}:${pad(second)}`;
+      } else {
+        return `${Math.floor(hour/24)}:${pad(hour%24)}:${pad(minute)}:${pad(second)}`;
+      }
     }
 
     // fetch leaderboard and update view
