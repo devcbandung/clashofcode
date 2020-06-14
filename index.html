@@ -144,7 +144,8 @@
           if (lastSubmitted.length) {
             lastSubmitted += ' lalu';
           }
-          return `<tr${isNew?' class="new"':''}><td>${person.rank}</td><td>${person.name}</td><td>${person.city}</td><td><b>${person.score}</b></td><td>${formatTime(person.time)}</td><td>${lastSubmitted}</td></tr>`;
+          var lastSubmittedTitle = person.timeLastSubmitted ? `${new Date(person.timeLastSubmitted * 1000)}` : '';
+          return `<tr${isNew?' class="new"':''}><td>${person.rank}</td><td>${person.name}</td><td>${person.city}</td><td><b>${person.score}</b></td><td>${formatTime(person.time)}</td><td title="${lastSubmittedTitle}">${lastSubmitted}</td></tr>`;
         }).join('');
         document.getElementById('tbody').innerHTML = html;
         document.getElementById('last-updated').innerHTML = `Last updated: ${new Date()}`;
