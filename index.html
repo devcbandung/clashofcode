@@ -27,6 +27,34 @@
         padding: 0 .5rem
       }
     }
+    footer {
+      padding-top: 2rem;
+      font-size: 75%;
+      margin: 0;
+    }
+    footer ul {
+      margin: 0;
+    }
+    footer ul ul {
+      margin-left: 1rem;
+    }
+    footer li {
+      margin: 0;
+    }
+    .new {
+      -webkit-animation-name: flash-animation;
+      -webkit-animation-duration: 1s;
+      animation-name: flash-animation;
+      animation-duration: 1s;
+    }
+    @-webkit-keyframes flash-animation {  
+      from { background: #cdfdec; }
+      to   { background: default; }
+    }
+    @keyframes flash-animation {  
+      from { background: #cdfdec; }
+      to   { background: default; }
+    }
   </style>
 </head>
 <body>
@@ -36,7 +64,6 @@
         <h1 style="padding-top: 4rem;">DevC Clash of Code 2020 Leaderboard</h1>
         <p>Kontes pemrograman oleh <a href="https://www.facebook.com/groups/DevCBandung">DevC Bandung</a> dan <a href="https://www.facebook.com/groups/DevCSemarang">DevC Semarang</a>.<br/>
         Untuk registrasi dan info lebih lanjut mengenai DevC Clash of Code 2020, <a href="https://bit.ly/DevCCoC">klik di sini</a>.</p>
-
         <p style="font-size:75%; margin: 0">
           Updated automatically every 30 seconds <a id="update" href="#">(update now)</a><br/>
           <span id="last-updated">Last updated: never</span>
@@ -59,6 +86,23 @@
             </tr>
           </tbody>
         </table>
+        <footer>
+          <hr/>
+          Note:<br/>
+          <ul>
+            <li>Jika nama Anda tidak muncul di sini, ada dua kemungkinan:
+              <ul>
+                <li>Anda belum mendaftar di <a href="https://bit.ly/DevCCoC">https://bit.ly/DevCCoC</a></li>
+                <li>Anda baru mendaftar beberapa saat yang lalu. Proses ekstraksi peserta baru dilakukan secara manual, jadi tunggu beberapa saat.</li>
+              </ul>
+            </li>
+            <li>Jika nama Anda ada di sini, dan skor kalian di Hackerrank &gt;0 tapi skor di sini 0:
+              <ul>
+                <li>Mungkin username Hackerrank yang kalian submit salah. Balas email konfirmasi registrasi kalian dengan permintaan ganti username.</li>
+              </ul>
+            </li>
+          </ul>
+          </footer>
       </div>
     </div>
   </div>
@@ -76,26 +120,33 @@
       return `${hour}:${pad(minute)}:${pad(second)}`;
     }
 
+    // fetch leaderboard and update view
+    var lastLeaderboard = [];
+    function fetchLeaderboard() {
+      console.log('fetching leaderboard ...');
+      fetch('https://devc-coc-2020.herokuapp.com/leaderboard').then(function (res) {
+        return res.json();
+      }).then(function (res) {
+        if (!res || !res.data) {
+          console.error('invalid response from API');
+          return;
+        }
+        var leaderboard = res.data;
+        var html = leaderboard.map(function (person) {
+          var lastIndex = lastLeaderboard.findIndex(function (p) { return p.username === person.username });
+          var isNew = (lastIndex === -1 || lastLeaderboard[lastIndex].score !== person.score);
+          return `<tr${isNew?' class="new"':''}><td>${person.rank}</td><td>${person.name}</td><td>${person.city}</td><td>${person.score}</td><td>${formatTime(person.time)}</td></tr>`;
+        }).join('');
+        document.getElementById('tbody').innerHTML = html;
+        document.getElementById('last-updated').innerHTML = `Last updated: ${new Date()}`;
+        lastLeaderboard = leaderboard;
+        console.log('fetching leaderboard done!')
+      }).catch(function (err) {
+        console.error('error fetching leaderboard:', err.message);
+      });
+    }
+
     document.addEventListener('DOMContentLoaded', function() {
-      function fetchLeaderboard() {
-        console.log('fetching leaderboard ...');
-        fetch('https://devc-coc-2020.herokuapp.com/leaderboard').then(function (res) {
-          return res.json();
-        }).then(function (res) {
-          if (!res || !res.data) {
-            console.error('invalid response from API');
-            return;
-          }
-          var html = res.data.map(function (person) {
-            return `<tr><td>${person.rank}</td><td>${person.name}</td><td>${person.city}</td><td>${person.score}</td><td>${formatTime(person.time)}</td></tr>`;
-          }).join('');
-          document.getElementById('tbody').innerHTML = html;
-          document.getElementById('last-updated').innerHTML = `Last updated: ${new Date()}`;
-          console.log('fetching leaderboard done!')
-        }).catch(function (err) {
-          console.error('error fetching leaderboard:', err.message);
-        });
-      }
       fetchLeaderboard();
       setInterval(fetchLeaderboard, 30000);
       document.getElementById('update').onclick = function (e) {
