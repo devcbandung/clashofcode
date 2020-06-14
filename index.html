@@ -68,7 +68,7 @@
           Updated automatically every 30 seconds <a id="update" href="#">(update now)</a><br/>
           <span id="last-updated">Last updated: never</span>
         </p>
-        <table class="table table-striped table-hover">
+        <table class="table table-striped table-hover table-scroll">
           <thead>
             <tr>
               <th>Rank</th>
@@ -76,6 +76,7 @@
               <th><abbr title="Kota DevC">Kota</abbr></th>
               <th>Skor</th>
               <th><abbr title="Jumlah dari waktu submisi terakhir semua soal dengan nilai maksimal">Waktu</abbr></th>
+              <th>Submisi Terakhir</th>
             </tr>
           </thead>
           <tbody id="tbody">
@@ -139,7 +140,11 @@
         var html = leaderboard.map(function (person) {
           var lastIndex = lastLeaderboard.findIndex(function (p) { return p.username === person.username });
           var isNew = (lastIndex === -1 || lastLeaderboard[lastIndex].score !== person.score);
-          return `<tr${isNew?' class="new"':''}><td>${person.rank}</td><td>${person.name}</td><td>${person.city}</td><td>${person.score}</td><td>${formatTime(person.time)}</td></tr>`;
+          var lastSubmitted = person.lastSubmitted.replace('about ', '').replace(/days?/, 'hari').replace(/hours?/, 'jam').replace(/minutes?/, 'menit');
+          if (lastSubmitted.length) {
+            lastSubmitted += ' lalu';
+          }
+          return `<tr${isNew?' class="new"':''}><td>${person.rank}</td><td>${person.name}</td><td>${person.city}</td><td><b>${person.score}</b></td><td>${formatTime(person.time)}</td><td>${lastSubmitted}</td></tr>`;
         }).join('');
         document.getElementById('tbody').innerHTML = html;
         document.getElementById('last-updated').innerHTML = `Last updated: ${new Date()}`;
