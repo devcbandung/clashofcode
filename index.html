@@ -119,9 +119,24 @@
       var minute = Math.floor(time % 60);
       var hour = Math.floor(time/60);
       if (hour < 24) {
-        return `${hour}:${pad(minute)}:${pad(second)}`;
+        return `${pad(hour)}:${pad(minute)}`;
       } else {
-        return `${Math.floor(hour/24)}:${pad(hour%24)}:${pad(minute)}:${pad(second)}`;
+        var day = Math.floor(hour/24);
+        hour %= 24;
+        return `${day}d ${hour}h`;
+      }
+    }
+    function formatTitleTime(time) {
+      var second = Math.floor(time % 60);
+      time = Math.floor(time/60);
+      var minute = Math.floor(time % 60);
+      var hour = Math.floor(time/60);
+      if (hour < 24) {
+        return `${hour ? `${hour} jam, ` : ''}${minute} menit, ${second} detik`;
+      } else {
+        var day = Math.floor(hour/24);
+        hour %= 24;
+        return `${day} hari, ${hour} jam, ${minute} menit, ${second} detik`;
       }
     }
 
@@ -145,7 +160,7 @@
             lastSubmitted += ' lalu';
           }
           var lastSubmittedTitle = person.timeLastSubmitted ? `${new Date(person.timeLastSubmitted * 1000)}` : '';
-          return `<tr${isNew?' class="new"':''}><td>${person.rank}</td><td>${person.name}</td><td>${person.city}</td><td><b>${person.score}</b></td><td>${formatTime(person.time)}</td><td title="${lastSubmittedTitle}">${lastSubmitted}</td></tr>`;
+          return `<tr${isNew?' class="new"':''}><td>${person.rank}</td><td>${person.name}</td><td>${person.city}</td><td><b>${person.score}</b></td><td title="${formatTitleTime(person.time)}">${formatTime(person.time)}</td><td title="${lastSubmittedTitle}">${lastSubmitted}</td></tr>`;
         }).join('');
         document.getElementById('tbody').innerHTML = html;
         document.getElementById('last-updated').innerHTML = `Last updated: ${new Date()}`;
