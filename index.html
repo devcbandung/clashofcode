@@ -249,7 +249,11 @@
           }
           var lastSubmittedTitle = person.timeLastSubmitted ? `${new Date(person.timeLastSubmitted * 1000)}` : '';
           var scoreDetails = person.scoreDetails.map(function (s, i) {
-            if (s !== Math.round(s)) s = s.toFixed(1);
+            if (Math.abs(s - Math.round(s)) < 1e-3) {
+              s = s.toFixed(1);
+            } else {
+              s = s.toFixed(0);
+            }
             var style = 'text-align: center;';
             if (s === problems[i].maxScore) {
               style += `background: #${['', 'affdeb', 'abeffa', 'edb0ff'][problems[i].wave]};`;
