@@ -8,11 +8,11 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/spectre.css/0.5.8/spectre.min.css" />
   <style>
     .body {
-      padding: 0 4rem;
-      width: calc(100vw - 12rem)
+      padding: 0 2rem;
+      /* width: calc(100vw - 12rem) */
     }
     .body>.container {
-      max-width: 800px;
+      /* max-width: 900px; */
       padding-bottom: 1.5rem
     }
     @media (max-width:960px) {
@@ -75,13 +75,29 @@
               <th>Nama</th>
               <th><abbr title="Kota DevC">Kota</abbr></th>
               <th>Skor</th>
+              <th style="text-align: center; border-left: .2rem solid #dadee4;">A</th>
+              <th style="text-align: center">B</th>
+              <th style="text-align: center">C</th>
+              <th style="text-align: center; border-right: .2rem solid #dadee4;">D</th>
+              <th style="text-align: center; border-left: .2rem solid #dadee4;">E</th>
+              <th style="text-align: center">F</th>
+              <th style="text-align: center">G</th>
+              <th style="text-align: center">H</th>
+              <th style="text-align: center; border-right: .2rem solid #dadee4;">I</th>
+              <th style="text-align: center; border-left: .2rem solid #dadee4;">J</th>
+              <th style="text-align: center">K</th>
+              <th style="text-align: center">L</th>
+              <th style="text-align: center">M</th>
+              <th style="text-align: center; border-right: .2rem solid #dadee4;">N</th>
               <th><abbr title="Jumlah dari waktu submisi terakhir semua soal dengan nilai maksimal">Waktu</abbr></th>
               <th>Submisi Terakhir</th>
+            </tr>
+            <tr>
             </tr>
           </thead>
           <tbody id="tbody">
             <tr>
-              <td colspan="6">
+              <td colspan="20">
                 <div class="loading loading-lg"></div>
               </td>
             </tr>
@@ -140,6 +156,78 @@
       }
     }
 
+    var problems = [{
+      slug: "devc-member-growth",
+      name: "DevC Member Growth",
+      maxScore: 20,
+      wave: 1,
+    }, {
+      slug: "devc-project-x",
+      name: "DevC Project X",
+      maxScore: 50,
+      wave: 1,
+    }, {
+      slug: "devc-meetup-venue",
+      name: "DevC Meetup Venue",
+      maxScore: 80,
+      wave: 1,
+    }, {
+      slug: "physical-distancing",
+      name: "Physical Distancing",
+      maxScore: 150,
+      wave: 1,
+    }, {
+      slug: "blt-seat-distancing",
+      name: "BLT Seat Distancing",
+      maxScore: 20,
+      wave: 2,
+    }, {
+      slug: "insensitive-palindrome",
+      name: "Insensitive Palindrome",
+      maxScore: 30,
+      wave: 2,
+    }, {
+      slug: "clock-angle",
+      name: "Clock Angle",
+      maxScore: 40,
+      wave: 2,
+    }, {
+      slug: "ars-magna",
+      name: "Ars Magna",
+      maxScore: 90,
+      wave: 2,
+    }, {
+      slug: "devc-volunteers",
+      name: "DevC Volunteers",
+      maxScore: 120,
+      wave: 2,
+    }, {
+      slug: "devc-online-meetup",
+      name: "DevC Online Meetup",
+      maxScore: 20,
+      wave: 3,
+    }, {
+      slug: "blt-seat-finder",
+      name: "BLT Seat Finder",
+      maxScore: 50,
+      wave: 3,
+    }, {
+      slug: "stacking-books",
+      name: "Stacking Books",
+      maxScore: 60,
+      wave: 3,
+    }, {
+      slug: "closing-the-portal",
+      name: "Closing The Portal",
+      maxScore: 100,
+      wave: 3,
+    }, {
+      slug: "art-gallery",
+      name: "Art Gallery",
+      maxScore: 180,
+      wave: 3,
+    }];
+
     // fetch leaderboard and update view
     var lastLeaderboard = [];
     function fetchLeaderboard() {
@@ -155,12 +243,26 @@
         var html = leaderboard.map(function (person) {
           var lastIndex = lastLeaderboard.findIndex(function (p) { return p.username === person.username });
           var isNew = (lastIndex === -1 || lastLeaderboard[lastIndex].score !== person.score);
-          var lastSubmitted = person.lastSubmitted.replace('about ', '').replace(/days?/, 'hari').replace(/hours?/, 'jam').replace(/minutes?/, 'menit').replace(/less than a/, '1');
+          var lastSubmitted = person.lastSubmitted.replace('about ', '').replace(/days?/, 'hari').replace(/hours?/, 'jam').replace(/minutes?/, 'menit').replace(/less than a/, '<1');
           if (lastSubmitted.length) {
             lastSubmitted += ' lalu';
           }
           var lastSubmittedTitle = person.timeLastSubmitted ? `${new Date(person.timeLastSubmitted * 1000)}` : '';
-          return `<tr${isNew?' class="new"':''}><td>${person.rank}</td><td>${person.name}</td><td>${person.city}</td><td><b>${person.score}</b></td><td title="${formatTitleTime(person.time)}">${formatTime(person.time)}</td><td title="${lastSubmittedTitle}">${lastSubmitted}</td></tr>`;
+          var scoreDetails = person.scoreDetails.map(function (s, i) {
+            if (s !== Math.round(s)) s = s.toFixed(1);
+            var style = 'text-align: center;';
+            if (s === problems[i].maxScore) {
+              style += `background: #${['', 'affdeb', 'abeffa', 'edb0ff'][problems[i].wave]};`;
+            }
+            if (i == 0 || i == 4 || i == 9) {
+              style += 'border-left: .2rem solid #dadee4;';
+            }
+            if (i == 3 || i == 8 || i == 13) {
+              style += 'border-right: .2rem solid #dadee4;';
+            }
+            return `<td title="${problems[i].name}" style="${style}">${s}</td>`;
+          }).join('');
+          return `<tr${isNew?' class="new"':''}><td>${person.rank}</td><td>${person.name}</td><td>${person.city}</td><td><b>${person.score}</b></td>${scoreDetails}<td title="${formatTitleTime(person.time)}">${formatTime(person.time)}</td><td title="${lastSubmittedTitle}">${lastSubmitted}</td></tr>`;
         }).join('');
         document.getElementById('tbody').innerHTML = html;
         document.getElementById('last-updated').innerHTML = `Last updated: ${new Date()}`;
@@ -173,7 +275,7 @@
 
     document.addEventListener('DOMContentLoaded', function() {
       fetchLeaderboard();
-      setInterval(fetchLeaderboard, 30000);
+      // setInterval(fetchLeaderboard, 30000);
       document.getElementById('update').onclick = function (e) {
         e.preventDefault();
         setTimeout(fetchLeaderboard, 0);
