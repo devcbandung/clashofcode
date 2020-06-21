@@ -280,7 +280,7 @@
 
     document.addEventListener('DOMContentLoaded', function() {
       fetchLeaderboard();
-      // setInterval(fetchLeaderboard, 30000);
+      setInterval(fetchLeaderboard, 30000);
       document.getElementById('update').onclick = function (e) {
         e.preventDefault();
         setTimeout(fetchLeaderboard, 0);
