@@ -1,0 +1,24 @@
+---
+layout: default
+---
+<article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">{{ page.title | escape }}</h1>
+    {%- if page.meta -%}
+      <p><b>{{ page.meta }}</b></p>
+    {%- endif -%}
+    <a class="post-meta" href="{{ '/' | append: page.categories[0] | relative_url }}">Kembali ke /{{ page.categories[0] }}</a>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    {{ content }}
+  </div>
+
+  <a class="post-meta" href="{{ '/' | append: page.categories[0] | relative_url }}">Kembali ke /{{ page.categories[0] }}</a>
+
+  <a class="u-url" href="{{ page.url | relative_url }}" hidden></a>
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3.0.1/es5/tex-mml-chtml.js"></script>
+  <script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$'],['\\[','\\]']]}};</script>
+</article>

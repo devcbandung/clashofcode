@@ -1,0 +1,54 @@
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  {%- seo -%}
+  {%- feed_meta -%}
+  {%- if site.google_analytics -%}
+    {%- include google-analytics.html -%}
+  {%- endif -%}
+  <link rel="stylesheet" href="{{ "/assets/main.css" | relative_url }}">
+  <style>
+    .table.table-scroll {
+      display: block;
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+    .wave1-full {
+      background: #affdeb;
+    }
+    .wave2-full {
+      background: #abeffa;
+    }
+    .wave3-full {
+      background: #edb0ff;
+    }
+    .wave-leftborder {
+      border-left: .2rem solid #dadee4;;
+    }
+    .wave-rightborder {
+      border-right: .2rem solid #dadee4;;
+    }
+    .center {
+      text-align: center;
+    }
+    .footer-column {
+      width: -webkit-calc(50% - (30px / 2));
+      width: calc(50% - (30px / 2));
+      float: left;
+      padding-left: 15px;
+    }
+    @media(max-width: 600px) {
+      .footer-column {
+        float: none;
+        width: -webkit-calc(100% - (30px / 2));
+        width: calc(100% - (30px / 2));
+      }
+    }
+    footer {
+      border-top: 1px solid #e8e8e8;
+      padding-top: 30px;
+      padding-bottom: 15px;
+    }
+  </style>
+</head>

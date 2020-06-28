@@ -1,0 +1,17 @@
+title: DevC Clash of Code
+description: >-
+  Kontes pemrograman oleh DevC Bandung dan DevC Semarang
+baseurl: "/clashofcode"
+url: ""
+
+practice_url: https://hackerrank.com/devc-clash-of-code-2020
+solution_url: https://github.com/devcbandung/clashofcode-testdata-and-solution
+solution_file: https://github.com/devcbandung/clashofcode-testdata-and-solution/blob/master
+permalink: /:categories/:title
+
+google_analytics: UA-169326283-1
+
+# Build settings
+# theme: minima
+plugins:
+  - jekyll-feed
