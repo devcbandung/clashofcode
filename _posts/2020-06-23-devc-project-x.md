@@ -27,7 +27,7 @@ Tetapi karena karyawan yang terlibat langsung bisa lebih satu, kita perlu mengat
 while (employee != 0 && !is_counted[employee]) {
   employee = report_to[employee];
   count_employee_x++;
-  is_counter[employee] = true;
+  is_counted[employee] = true;
 }
 {% endhighlight %}
 
@@ -58,7 +58,7 @@ int main() {
     cin << employee;
     while (employee != 0 && !is_counted[x]) {
       count_employee_x++;
-      visited[x] = true;
+      is_counted[x] = true;
       employee = report_to[x];
     }
   }
